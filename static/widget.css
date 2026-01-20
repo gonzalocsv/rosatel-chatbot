@@ -1,0 +1,871 @@
+/* ================================================================================
+                         ROSATEL WIDGET - ESTILOS
+                         Diseno inspirado en rosatel.pe
+   ================================================================================ */
+
+:root {
+    --rosatel-primary: #D4145A;
+    --rosatel-primary-dark: #B01048;
+    --rosatel-primary-light: #F5E6EC;
+    --rosatel-secondary: #FFFFFF;
+    --rosatel-accent: #FFB6C1;
+    --rosatel-text: #333333;
+    --rosatel-text-light: #666666;
+    --rosatel-text-muted: #999999;
+    --rosatel-bg-bot: #FAFAFA;
+    --rosatel-bg-user: #FCE4EC;
+    --rosatel-border: #F0E0E5;
+    --rosatel-shadow: 0 4px 24px rgba(212, 20, 90, 0.12);
+    --rosatel-shadow-hover: 0 8px 32px rgba(212, 20, 90, 0.2);
+    --widget-width: 380px;
+    --widget-height: 580px;
+    --widget-radius: 20px;
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s ease;
+}
+
+/* Demo page styles */
+.demo-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #FFF5F7 0%, #FCE4EC 50%, #F8BBD9 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--rosatel-text);
+}
+
+.demo-content {
+    text-align: center;
+    padding: 40px;
+}
+
+.demo-content h1 {
+    font-size: 42px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: var(--rosatel-primary);
+}
+
+.demo-content p {
+    font-size: 18px;
+    color: var(--rosatel-text-light);
+    margin-bottom: 8px;
+}
+
+.demo-instruction {
+    margin-top: 30px;
+    padding: 20px 28px;
+    background: white;
+    border-radius: 16px;
+    font-size: 15px;
+    box-shadow: var(--rosatel-shadow);
+    color: var(--rosatel-text);
+}
+
+/* Widget container */
+.rosatel-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 99999;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Toggle button */
+.widget-toggle {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rosatel-primary) 0%, var(--rosatel-primary-dark) 100%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--rosatel-shadow);
+    transition: all var(--transition-normal);
+    position: relative;
+}
+
+.widget-toggle:hover {
+    transform: scale(1.06);
+    box-shadow: var(--rosatel-shadow-hover);
+}
+
+.widget-toggle svg {
+    width: 26px;
+    height: 26px;
+    color: white;
+    transition: all var(--transition-fast);
+}
+
+.widget-toggle .icon-close {
+    position: absolute;
+    opacity: 0;
+    transform: rotate(-90deg) scale(0);
+}
+
+.widget-toggle.active .icon-chat {
+    opacity: 0;
+    transform: rotate(90deg) scale(0);
+}
+
+.widget-toggle.active .icon-close {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+}
+
+/* Chat window */
+.widget-window {
+    position: absolute;
+    bottom: 72px;
+    right: 0;
+    width: var(--widget-width);
+    height: var(--widget-height);
+    background: white;
+    border-radius: var(--widget-radius);
+    box-shadow: var(--rosatel-shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px) scale(0.96);
+    transition: all var(--transition-normal);
+    border: 1px solid var(--rosatel-border);
+}
+
+.widget-window.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* Header */
+.widget-header {
+    background: linear-gradient(135deg, var(--rosatel-primary) 0%, var(--rosatel-primary-dark) 100%);
+    color: white;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.header-avatar {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-emoji {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 11px;
+    height: 11px;
+    background: #4CAF50;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+.header-info {
+    flex: 1;
+}
+
+.header-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.2px;
+}
+
+.header-status {
+    font-size: 12px;
+    opacity: 0.9;
+    margin: 3px 0 0 0;
+    font-weight: 400;
+}
+
+.header-close {
+    width: 34px;
+    height: 34px;
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-fast);
+}
+
+.header-close:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.header-close svg {
+    width: 18px;
+    height: 18px;
+    color: white;
+}
+
+/* Messages area */
+.widget-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: linear-gradient(180deg, #FEFEFE 0%, #FDF8FA 100%);
+}
+
+.widget-messages::-webkit-scrollbar {
+    width: 5px;
+}
+
+.widget-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.widget-messages::-webkit-scrollbar-thumb {
+    background: #E0D0D5;
+    border-radius: 3px;
+}
+
+.widget-messages::-webkit-scrollbar-thumb:hover {
+    background: #D0C0C5;
+}
+
+/* Message bubbles */
+.message {
+    max-width: 82%;
+    animation: messageIn 0.25s ease;
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-bot {
+    align-self: flex-start;
+}
+
+.message-user {
+    align-self: flex-end;
+}
+
+.message-bubble {
+    padding: 13px 17px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.55;
+    word-wrap: break-word;
+}
+
+.message-bot .message-bubble {
+    background: var(--rosatel-bg-bot);
+    color: var(--rosatel-text);
+    border-bottom-left-radius: 6px;
+    border: 1px solid var(--rosatel-border);
+}
+
+.message-user .message-bubble {
+    background: linear-gradient(135deg, var(--rosatel-primary) 0%, var(--rosatel-primary-dark) 100%);
+    color: white;
+    border-bottom-right-radius: 6px;
+}
+
+.message-time {
+    font-size: 11px;
+    color: var(--rosatel-text-muted);
+    margin-top: 5px;
+    padding: 0 4px;
+}
+
+.message-user .message-time {
+    text-align: right;
+}
+
+/* Typing indicator */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 14px 18px;
+    background: var(--rosatel-bg-bot);
+    border-radius: 18px;
+    border-bottom-left-radius: 6px;
+    width: fit-content;
+    border: 1px solid var(--rosatel-border);
+}
+
+.typing-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--rosatel-primary);
+    border-radius: 50%;
+    animation: typingBounce 1.3s infinite ease-in-out;
+    opacity: 0.6;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.3s; }
+.typing-dot:nth-child(2) { animation-delay: -0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes typingBounce {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.4;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Product cards */
+.product-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    margin-top: 10px;
+    border: 1px solid var(--rosatel-border);
+}
+
+.product-image {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    background: var(--rosatel-primary-light);
+}
+
+.product-info {
+    padding: 14px;
+}
+
+.product-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--rosatel-text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+.product-price {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--rosatel-primary);
+}
+
+.product-price-original {
+    font-size: 13px;
+    color: var(--rosatel-text-muted);
+    text-decoration: line-through;
+    margin-left: 8px;
+    font-weight: 400;
+}
+
+.product-btn {
+    width: 100%;
+    padding: 11px;
+    background: linear-gradient(135deg, var(--rosatel-primary) 0%, var(--rosatel-primary-dark) 100%);
+    color: white;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-top: 12px;
+    border-radius: 10px;
+}
+
+.product-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(212, 20, 90, 0.3);
+}
+
+/* Input area */
+.widget-input-area {
+    padding: 14px 16px;
+    background: white;
+    border-top: 1px solid var(--rosatel-border);
+    flex-shrink: 0;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #F8F5F6;
+    border-radius: 26px;
+    padding: 5px 5px 5px 18px;
+    border: 1px solid transparent;
+    transition: border-color var(--transition-fast);
+}
+
+.input-container:focus-within {
+    border-color: var(--rosatel-primary);
+    background: white;
+}
+
+.widget-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    color: var(--rosatel-text);
+}
+
+.widget-input::placeholder {
+    color: var(--rosatel-text-muted);
+}
+
+.emoji-btn,
+.send-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.emoji-btn svg,
+.send-btn svg {
+    width: 20px;
+    height: 20px;
+    color: var(--rosatel-text-muted);
+}
+
+.emoji-btn:hover {
+    background: var(--rosatel-primary-light);
+}
+
+.emoji-btn:hover svg {
+    color: var(--rosatel-primary);
+}
+
+.send-btn {
+    background: linear-gradient(135deg, var(--rosatel-primary) 0%, var(--rosatel-primary-dark) 100%);
+}
+
+.send-btn svg {
+    color: white;
+    transform: translateX(1px);
+}
+
+.send-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(212, 20, 90, 0.3);
+}
+
+/* Emoji picker */
+.emoji-picker {
+    position: absolute;
+    bottom: 135px;
+    right: 16px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: var(--rosatel-shadow);
+    padding: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: all var(--transition-fast);
+    border: 1px solid var(--rosatel-border);
+}
+
+.emoji-picker.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+}
+
+.emoji-item {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.emoji-item:hover {
+    background: var(--rosatel-primary-light);
+}
+
+/* Footer */
+.widget-footer {
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--rosatel-text-muted);
+    background: white;
+    border-top: 1px solid var(--rosatel-border);
+    flex-shrink: 0;
+}
+
+.footer-link {
+    color: var(--rosatel-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
+
+/* Quick replies */
+.quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.quick-reply-btn {
+    padding: 9px 16px;
+    background: white;
+    border: 1px solid var(--rosatel-primary);
+    color: var(--rosatel-primary);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.quick-reply-btn:hover {
+    background: var(--rosatel-primary);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .rosatel-widget {
+        bottom: 16px;
+        right: 16px;
+    }
+    
+    .widget-window {
+        width: calc(100vw - 32px);
+        height: calc(100vh - 100px);
+        max-height: 600px;
+        bottom: 68px;
+        right: 0;
+        border-radius: 16px;
+    }
+    
+    .widget-toggle {
+        width: 52px;
+        height: 52px;
+    }
+    
+    .widget-toggle svg {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* Message with markdown support */
+.message-bubble strong {
+    font-weight: 600;
+}
+
+.message-bubble em {
+    font-style: italic;
+}
+
+.message-bubble ul,
+.message-bubble ol {
+    margin: 8px 0;
+    padding-left: 18px;
+}
+
+.message-bubble li {
+    margin: 4px 0;
+}
+
+/* Subtle animation for toggle */
+.widget-toggle.pulse {
+    animation: subtlePulse 2.5s infinite;
+}
+
+@keyframes subtlePulse {
+    0% {
+        box-shadow: var(--rosatel-shadow);
+    }
+    50% {
+        box-shadow: 0 4px 30px rgba(212, 20, 90, 0.25);
+    }
+    100% {
+        box-shadow: var(--rosatel-shadow);
+    }
+}
+
+/* ================================================================================
+   PRODUCTOS - Tarjetas de producto
+   ================================================================================ */
+
+.products-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+    width: 100%;
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--rosatel-border);
+    display: flex;
+    flex-direction: row;
+    transition: var(--transition-normal);
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 16px rgba(212, 20, 90, 0.15);
+    border-color: var(--rosatel-primary-light);
+}
+
+.product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: #f5f5f5;
+}
+
+.product-info {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.product-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--rosatel-text);
+    line-height: 1.3;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--rosatel-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.product-price-original {
+    font-size: 12px;
+    color: var(--rosatel-text-muted);
+    text-decoration: line-through;
+    font-weight: 400;
+}
+
+.product-discount {
+    font-size: 11px;
+    background: #4CAF50;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.product-btn {
+    margin-top: 8px;
+    background: var(--rosatel-primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-family: inherit;
+    align-self: flex-start;
+}
+
+.product-btn:hover {
+    background: var(--rosatel-primary-dark);
+    transform: translateY(-1px);
+}
+
+.product-btn:active {
+    transform: translateY(0);
+}
+
+/* Checkout link styling */
+.message-bubble a {
+    color: var(--rosatel-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.message-bubble a:hover {
+    text-decoration: underline;
+}
+
+/* Boton finalizar compra - igual a Lo quiero pero centrado */
+.checkout-btn {
+    display: block;
+    margin: 12px auto 0 auto;
+    background: var(--rosatel-primary);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-family: inherit;
+}
+
+.checkout-btn:hover {
+    background: var(--rosatel-primary-dark);
+    transform: translateY(-1px);
+}
+
+.checkout-btn:active {
+    transform: translateY(0);
+}
+
+/* Resumen de checkout */
+.checkout-summary {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin: 12px auto 0 auto;
+    max-width: 280px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.checkout-summary h4 {
+    margin: 0 0 12px 0;
+    color: var(--rosatel-text);
+    font-size: 16px;
+}
+
+.checkout-items {
+    border-bottom: 1px solid var(--rosatel-border);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.checkout-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 12px;
+    color: var(--rosatel-text-light);
+    gap: 8px;
+}
+
+.checkout-item span:first-child {
+    flex: 1;
+    text-align: left;
+}
+
+.checkout-item span:last-child {
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.checkout-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    color: var(--rosatel-primary);
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.checkout-link-btn {
+    display: block;
+    width: 90%;
+    max-width: 250px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, var(--rosatel-primary) 0%, var(--rosatel-primary-dark) 100%);
+    color: white !important;
+    border: none;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-sizing: border-box;
+}
+
+.checkout-link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 20, 90, 0.3);
+}
+
+.checkout-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--rosatel-text-muted);
+    margin-top: 10px;
+    margin-bottom: 0;
+}
