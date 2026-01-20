@@ -1,0 +1,283 @@
+# ================================================================================
+#                    ROSATEL MCP TOOLBOX CONFIGURATION
+#                    BigQuery Integration for Product Search
+# ================================================================================
+
+sources:
+  rosatel_bigquery:
+    kind: bigquery
+    project: gen-lang-client-0656174640
+    location: US
+
+tools:
+  # Buscar productos por texto libre
+  buscar_productos:
+    kind: bigquery-sql
+    source: rosatel_bigquery
+    description: |
+      Busca productos en el inventario de Rosatel por nombre, categoria, tipo, color o descripcion.
+      Usa este tool cuando el usuario busque flores, regalos o productos especificos.
+    parameters:
+      - name: query
+        type: string
+        description: Texto de busqueda (nombre de producto, categoria, color, etc.)
+    statement: |
+      SELECT 
+        ID,
+        Categoria,
+        Tipo,
+        Producto,
+        Foto,
+        Color,
+        Precio,
+        Stock,
+        Descuento,
+        Precio_final
+      FROM `gen-lang-client-0656174640.RosatelDemo.Inventario_Productos`
+      WHERE SAFE_CAST(Stock AS INT64) > 0
+        AND (
+          LOWER(Producto) LIKE LOWER(CONCAT('%', @query, '%'))
+          OR LOWER(Categoria) LIKE LOWER(CONCAT('%', @query, '%'))
+          OR LOWER(Tipo) LIKE LOWER(CONCAT('%', @query, '%'))
+          OR LOWER(Color) LIKE LOWER(CONCAT('%', @query, '%'))
+        )
+      ORDER BY SAFE_CAST(Precio_final AS FLOAT64) ASC
+      LIMIT 10
+
+  # Buscar por categoria y rango de precio
+  buscar_por_categoria_precio:
+    kind: bigquery-sql
+    source: rosatel_bigquery
+    description: |
+      Busca productos filtrando por categoria y rango de precio.
+      Util cuando el usuario menciona un presupuesto especifico.
+    parameters:
+      - name: categoria
+        type: string
+        description: Categoria del producto (Flores, Peluches, Chocolates, Combos)
+      - name: precio_min
+        type: float
+        description: Precio minimo en soles
+      - name: precio_max
+        type: float
+        description: Precio maximo en soles
+    statement: |
+      SELECT 
+        ID,
+        Categoria,
+        Tipo,
+        Producto,
+        Foto,
+        Color,
+        Precio,
+        Stock,
+        Descuento,
+        Precio_final
+      FROM `gen-lang-client-0656174640.RosatelDemo.Inventario_Productos`
+      WHERE SAFE_CAST(Stock AS INT64) > 0
+        AND LOWER(Categoria) = LOWER(@categoria)
+        AND SAFE_CAST(Precio_final AS FLOAT64) >= @precio_min
+        AND SAFE_CAST(Precio_final AS FLOAT64) <= @precio_max
+      ORDER BY SAFE_CAST(Precio_final AS FLOAT64) ASC
+      LIMIT 10
+
+  # Obtener producto por ID
+  obtener_producto:
+    kind: bigquery-sql
+    source: rosatel_bigquery
+    description: |
+      Obtiene los detalles completos de un producto especifico por su ID.
+      Usa esto cuando necesites mostrar informacion detallada de un producto.
+    parameters:
+      - name: producto_id
+        type: string
+        description: ID unico del producto
+    statement: |
+      SELECT 
+        ID,
+        Categoria,
+        Tipo,
+        Producto,
+        Foto,
+        Color,
+        Precio,
+        Stock,
+        Descuento,
+        Precio_final
+      FROM `gen-lang-client-0656174640.RosatelDemo.Inventario_Productos`
+      WHERE ID = @producto_id
+      LIMIT 1
+
+  # Listar categorias disponibles
+  listar_categorias:
+    kind: bigquery-sql
+    source: rosatel_bigquery
+    description: |
+      Lista todas las categorias de productos disponibles en Rosatel.
+    parameters: []
+    statement: |
+      SELECT DISTINCT Categoria, COUNT(*) as cantidad
+      FROM `gen-lang-client-0656174640.RosatelDemo.Inventario_Productos`
+      WHERE SAFE_CAST(Stock AS INT64) > 0
+      GROUP BY Categoria
+      ORDER BY cantidad DESC
+
+  # Buscar productos con descuento
+  productos_con_descuento:
+    kind: bigquery-sql
+    source: rosatel_bigquery
+    description: |
+      Busca productos que tienen descuento activo.
+      Ideal para mostrar ofertas y promociones.
+    parameters: []
+    statement: |
+      SELECT 
+        ID,
+        Categoria,
+        Tipo,
+        Producto,
+        Foto,
+        Color,
+        Precio,
+        Stock,
+        Descuento,
+        Precio_final
+      FROM `gen-lang-client-0656174640.RosatelDemo.Inventario_Productos`
+      WHERE SAFE_CAST(Stock AS INT64) > 0
+        AND SAFE_CAST(Descuento AS FLOAT64) > 0
+      ORDER BY Descuento DESC
+      LIMIT 10
+
+  # Buscar por color
+  buscar_por_color:
+    kind: bigquery-sql
+    source: rosatel_bigquery
+    description: |
+      Busca productos por color especifico.
+      Util cuando el usuario menciona un color preferido.
+    parameters:
+      - name: color
+        type: string
+        description: Color del producto (Rojo, Rosa, Blanco, Amarillo, etc.)
+    statement: |
+      SELECT 
+        ID,
+        Categoria,
+        Tipo,
+        Producto,
+        Foto,
+        Color,
+        Precio,
+        Stock,
+        Descuento,
+        Precio_final
+      FROM `gen-lang-client-0656174640.RosatelDemo.Inventario_Productos`
+      WHERE SAFE_CAST(Stock AS INT64) > 0
+        AND LOWER(Color) LIKE LOWER(CONCAT('%', @color, '%'))
+      ORDER BY SAFE_CAST(Precio_final AS FLOAT64) ASC
+      LIMIT 10
+
+  # Verificar stock de producto
+  verificar_stock:
+    kind: bigquery-sql
+    source: rosatel_bigquery
+    description: |
+      Verifica si hay stock disponible de un producto especifico.
+    parameters:
+      - name: producto_id
+        type: string
+        description: ID del producto a verificar
+    statement: |
+      SELECT 
+        ID,
+        Producto,
+        Stock,
+        CASE WHEN SAFE_CAST(Stock AS INT64) > 0 THEN 'Disponible' ELSE 'Agotado' END as estado
+      FROM `gen-lang-client-0656174640.RosatelDemo.Inventario_Productos`
+      WHERE ID = @producto_id
+
+  # Productos mas economicos
+  productos_economicos:
+    kind: bigquery-sql
+    source: rosatel_bigquery
+    description: |
+      Lista los productos mas economicos disponibles.
+      Ideal para presupuestos ajustados.
+    parameters:
+      - name: limite
+        type: integer
+        description: Cantidad de productos a mostrar
+    statement: |
+      SELECT 
+        ID,
+        Categoria,
+        Tipo,
+        Producto,
+        Foto,
+        Color,
+        Precio,
+        Stock,
+        Descuento,
+        Precio_final
+      FROM `gen-lang-client-0656174640.RosatelDemo.Inventario_Productos`
+      WHERE SAFE_CAST(Stock AS INT64) > 0
+      ORDER BY SAFE_CAST(Precio_final AS FLOAT64) ASC
+      LIMIT @limite
+
+  # Busqueda avanzada combinada
+  busqueda_avanzada:
+    kind: bigquery-sql
+    source: rosatel_bigquery
+    description: |
+      Busqueda avanzada que combina multiples filtros opcionales.
+      Permite buscar por texto, categoria, color y rango de precio simultaneamente.
+    parameters:
+      - name: texto
+        type: string
+        description: Texto de busqueda general (puede estar vacio)
+      - name: categoria
+        type: string
+        description: Categoria (puede estar vacio para todas)
+      - name: color
+        type: string
+        description: Color preferido (puede estar vacio)
+      - name: precio_max
+        type: float
+        description: Precio maximo (usar 99999 para sin limite)
+    statement: |
+      SELECT 
+        ID,
+        Categoria,
+        Tipo,
+        Producto,
+        Foto,
+        Color,
+        Precio,
+        Stock,
+        Descuento,
+        Precio_final
+      FROM `gen-lang-client-0656174640.RosatelDemo.Inventario_Productos`
+      WHERE SAFE_CAST(Stock AS INT64) > 0
+        AND SAFE_CAST(Precio_final AS FLOAT64) <= @precio_max
+        AND (
+          @texto = '' 
+          OR LOWER(Producto) LIKE LOWER(CONCAT('%', @texto, '%'))
+          OR LOWER(Tipo) LIKE LOWER(CONCAT('%', @texto, '%'))
+          OR LOWER(Categoria) LIKE LOWER(CONCAT('%', @texto, '%'))
+        )
+        AND (@categoria = '' OR LOWER(Categoria) = LOWER(@categoria))
+        AND (@color = '' OR LOWER(Color) LIKE LOWER(CONCAT('%', @color, '%')))
+      ORDER BY SAFE_CAST(Precio_final AS FLOAT64) ASC
+      LIMIT 10
+
+toolsets:
+  rosatel_ventas:
+    - buscar_productos
+    - buscar_por_categoria_precio
+    - obtener_producto
+    - buscar_por_color
+    - productos_con_descuento
+    - productos_economicos
+    - busqueda_avanzada
+    - listar_categorias
+    - verificar_stock
