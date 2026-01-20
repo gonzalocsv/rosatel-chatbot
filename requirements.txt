@@ -1,0 +1,28 @@
+# FastAPI y servidor
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+
+# Google Cloud
+google-cloud-bigquery==3.14.0
+google-generativeai==0.3.2
+
+# MCP Toolbox SDK
+toolbox-core
+
+# Base de datos y cache
+redis==5.0.1
+
+# HTTP Client
+httpx==0.26.0
+
+# Configuracion
+python-dotenv==1.0.0
+pydantic-settings==2.1.0
+
+# Templates y archivos estaticos
+jinja2==3.1.3
+aiofiles==23.2.1
+
+# Utilidades
+python-multipart==0.0.6
+pytz==2024.1
